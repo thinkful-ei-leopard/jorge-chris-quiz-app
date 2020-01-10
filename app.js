@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Example store structure
  */
@@ -41,3 +43,30 @@ const store = {
  * You may add attributes (classes, ids, etc) to the existing HTML elements, or link stylesheets or additional scripts if necessary
  *
  */
+
+function render(){
+  //render the next
+}
+function startQuiz(){
+  //when button is clicked, the first question page will render 
+}
+function submitAnswer(){
+  //when button is clicked, the results page will render with the correct answer 
+  //and current score will be updated
+}
+function nextQuestion(){
+  //when button is clicked, the next question page will render 
+}
+function restartQuiz(){
+  //when button is clicked, start page will render
+}
+
+function main(){
+  render();
+  startQuiz();
+  submitAnswer();
+  nextQuestion();
+  restartQuiz();
+}
+
+$(main);
