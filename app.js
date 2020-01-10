@@ -25,7 +25,7 @@ const store = {
         'Three horns divide'
       ],
       correctAnswer: 'Three horns divide'
-    }
+    },
     {
       question: 'What is the name of the man who helps put the robots eye back into place?',
       answers: [
@@ -35,7 +35,7 @@ const store = {
         'Sir nighteye death'
       ],
       correctAnswer: 'Sir Hammerlock'
-    }
+    },
     {
       question: 'Where do you farm the easy infinity pistol?',
       answers: [
@@ -45,7 +45,7 @@ const store = {
         'Southern Shelf'
       ],
       correctAnswer: 'Three horns drive'
-    }
+    },
     {
       question: 'What is the name of the first boss you get to kill in Borderlands 2?',
       answers: [
@@ -55,7 +55,7 @@ const store = {
         'Terramorphus the invincible'
       ],
       correctAnswer: 'Three horns drive'
-    }
+    },
   ],
   questionNumber: 0,
   score: 0
@@ -74,9 +74,56 @@ const store = {
  *
  */
 
+//need a function to extract an
+/*function generateStartView(){
+  return;
+}
+
+function generateQuestionView(){
+  return;
+}*/
+
+function generateCorrectView(){
+  return `<div>
+  <h1>Correct</h1>
+  <img src="http://vignette2.wikia.nocookie.net/talesfromtheborderlands/images/7/7e/Thumbsupbot.png/revision/latest?cb=20141126165829" alt="Thumbs up image">
+  <button type="button" id="next">Next</button>
+</div>`;
+}
+
+/*function generateIncorrectView(){
+  return;
+}
+
+function generateFinalView(){
+  return;
+}
+
+function generateQuestionString(item){
+  return;
+}
+
+function generateAnswerString(item){
+  return;
+}
+
+function generateCorrectAnswerString(item){
+  return;
+}*/
+
 function render(){
-  //render the next
   console.log('render is working');
+
+  //$('main').html(generateStartView());
+
+  //const answerString = extractAnswerString(store);
+  //const correctAnswer = extractCorrectAnswerString(store);
+  
+  //if(answerString === correctAnswer){
+    $('main').html(generateCorrectView());
+  //} else {
+    //$('main').html(generateIncorrectView());
+  //}
 }
 function startQuiz(){
   //when button is clicked, the first question view will render 
