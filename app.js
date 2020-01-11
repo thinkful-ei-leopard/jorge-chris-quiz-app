@@ -3,8 +3,11 @@
 /**
  * Example store structure
  */
-const store = {
+const STORE = {
   // 5 or more questions are required
+  page: 'start',
+  questionNumber: 0,
+  score: 0,
   questions: [
     {
       question: 'What is the name of the robot that follows your character  around?',
@@ -14,7 +17,7 @@ const store = {
         'Claptrap',
         'E2-DR'
       ],
-      correctAnswer: 'Claptrap'
+      correctAnswer: 2
     },
     {
       question: 'Where can you get a double penetrating unkempt harold weapon ?',
@@ -57,8 +60,6 @@ const store = {
       correctAnswer: 'Three horns drive'
     },
   ],
-  questionNumber: 0,
-  score: 0
 };
 
 /**
@@ -74,7 +75,6 @@ const store = {
  *
  */
 
-//need a function to extract an
 /*function generateStartView(){
   return;
 }
@@ -83,7 +83,7 @@ function generateQuestionView(){
   return;
 }*/
 
-function generateCorrectView(){
+function generateCorrectView() {
   return `<div>
   <h1>Correct</h1>
   <img src="http://vignette2.wikia.nocookie.net/talesfromtheborderlands/images/7/7e/Thumbsupbot.png/revision/latest?cb=20141126165829" alt="Thumbs up image">
@@ -99,47 +99,67 @@ function generateFinalView(){
   return;
 }
 
-function generateQuestionString(item){
-  return;
-}
-
-function generateAnswerString(item){
-  return;
-}
-
-function generateCorrectAnswerString(item){
-  return;
 }*/
 
-function render(){
+function render() {
   console.log('render is working');
 
   //$('main').html(generateStartView());
 
   //const answerString = extractAnswerString(store);
   //const correctAnswer = extractCorrectAnswerString(store);
-  
+
   //if(answerString === correctAnswer){
-    $('main').html(generateCorrectView());
+  //$('main').html(generateCorrectView());
   //} else {
-    //$('main').html(generateIncorrectView());
+  //$('main').html(generateIncorrectView());
   //}
+  $('.page').hide()
+  $('#' + STORE.page).show()
+  if (STORE.page === 'question') {
+    const currentQuestion = STORE.questions[STORE.questionNumber];
+    $('#question h2').text(currentQuestion.question);
+    $('#label0').text(currentQuestion.answers[0]);
+    $('#label1').text(currentQuestion.answers[1]);
+    $('#label2').text(currentQuestion.answers[2]);
+    $('#label3').text(currentQuestion.answers[3]);
+  } else if (STORE.page === 'incorrect') {
+
+  } else if (STORE.page === 'final') {
+
+  }
 }
-function startQuiz(){
+function startQuiz() {
   //when button is clicked, the first question view will render 
+  $('#start button').click(event => {
+    STORE.page = 'question';
+    render();
+  });
 }
-function submitAnswer(){
+function submitAnswer() {
   //when button is clicked, the results page will render with the correct answer 
   //and current score will be updated
+  $('form').submit(event => {
+    event.preventDefault()
+    const answer = event.target.answer.value
+    const currentQuestion = STORE.questions[STORE.questionNumber];
+    if(currentQuestion.correctAnswer == answer){
+      STORE.score++
+      STORE.page = 'correct';
+    } else {
+      STORE.page = 'incorrect';
+    }
+    render();
+  });
 }
-function nextQuestion(){
+function nextQuestion() {
   //when button is clicked, the next question page will render 
 }
-function restartQuiz(){
+function restartQuiz() {
   //when button is clicked, start view will render 
 }
 
-function main(){
+function main() {
   render();
   startQuiz();
   submitAnswer();
