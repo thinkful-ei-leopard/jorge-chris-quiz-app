@@ -25,39 +25,39 @@ const STORE = {
         'Sanctuary',
         'Claptraps place',
         'Southern shelf',
-        'Three horns divide'
+        'This'
       ],
-      correctAnswer: 'Three horns divide'
+      correctAnswer: 3
     },
     {
       question: 'What is the name of the man who helps put the robots eye back into place?',
       answers: [
         'Sir mix a lot',
         'Siracha',
-        'Sir Hammerlock',
+        'This',
         'Sir nighteye death'
       ],
-      correctAnswer: 'Sir Hammerlock'
+      correctAnswer: 2
     },
     {
       question: 'Where do you farm the easy infinity pistol?',
       answers: [
-        'Three horns drive',
+        'This',
         'Sanctuary',
         'Claptraps place',
         'Southern Shelf'
       ],
-      correctAnswer: 'Three horns drive'
+      correctAnswer: 0
     },
     {
       question: 'What is the name of the first boss you get to kill in Borderlands 2?',
       answers: [
-        'Knuckledragger',
+        'This',
         'Badassarus',
         'Dukinomom',
         'Terramorphus the invincible'
       ],
-      correctAnswer: 'Three horns drive'
+      correctAnswer: 0
     },
   ],
 };
@@ -75,13 +75,28 @@ const STORE = {
  *
  */
 
-/*function generateStartView(){
-  return;
+function generateStartView(){
+  return `<section class="page" id="start">
+  <button id="start">Start</button>
+</section>`;
 }
-
 function generateQuestionView(){
-  return;
-}*/
+  return `<section class="page" id="question">
+  <form action="">
+    <h2></h2>
+    <label for="radio0" id="label0"></label>
+    <input type="radio" name="answer" id="radio0" value="0">
+    <label for="radio1" id="label1"></label>
+    <input type="radio" name="answer" id="radio1" value="1">
+    <label for="radio2" id="label2"></label>
+    <input type="radio" name="answer" id="radio2" value="2">
+    <label for="radio3" id="label3"></label>
+    <input type="radio" name="answer" id="radio3" value="3">
+
+    <button>Enter</button>
+  </form>
+</section>`;
+}
 
 function generateCorrectView() {
   return `<div>
@@ -91,79 +106,102 @@ function generateCorrectView() {
 </div>`;
 }
 
-/*function generateIncorrectView(){
-  return;
+function generateIncorrectView(){
+  return `<section class="page" id="incorrect">
+  <button type="button" id="next">Next</button>
+</section>`;
 }
 
 function generateFinalView(){
-  return;
+  return `<section class="page" id="final">
+  <button id="restart">Restart</button>
+</section>`;
 }
-
-}*/
 
 function render() {
   console.log('render is working');
+  console.log(`Current question index is ${STORE.questionNumber}`);
+  console.log(`Current question score is ${STORE.score}`);
 
-  //$('main').html(generateStartView());
+  if (STORE.page ==='start'){
+    const startView = generateStartView();
+    $('main').html(startView);
+  } else if (STORE.page === 'question') {
+    const questionView = generateQuestionView();
+    $('main').html(questionView);
 
-  //const answerString = extractAnswerString(store);
-  //const correctAnswer = extractCorrectAnswerString(store);
-
-  //if(answerString === correctAnswer){
-  //$('main').html(generateCorrectView());
-  //} else {
-  //$('main').html(generateIncorrectView());
-  //}
-  $('.page').hide()
-  $('#' + STORE.page).show()
-  if (STORE.page === 'question') {
     const currentQuestion = STORE.questions[STORE.questionNumber];
     $('#question h2').text(currentQuestion.question);
     $('#label0').text(currentQuestion.answers[0]);
     $('#label1').text(currentQuestion.answers[1]);
     $('#label2').text(currentQuestion.answers[2]);
     $('#label3').text(currentQuestion.answers[3]);
-  } else if (STORE.page === 'incorrect') {
-
-  } else if (STORE.page === 'final') {
-
+  } else if (STORE.page === 'correct'){
+    const correctView = generateCorrectView();
+    $('main').html(correctView);
+  } else if (STORE.page === 'incorrect'){
+    const incorrectView = generateIncorrectView();
+    $('main').html(incorrectView);
+  } else if (STORE.page === 'final'){
+    const finalView = generateFinalView();
+    $('main').html(finalView);
   }
 }
 function startQuiz() {
   //when button is clicked, the first question view will render 
-  $('#start button').click(event => {
+  $('main').on('click', '#start', event => {
     STORE.page = 'question';
     render();
+    console.log ('start button working');
   });
 }
 function submitAnswer() {
   //when button is clicked, the results page will render with the correct answer 
   //and current score will be updated
-  $('form').submit(event => {
-    event.preventDefault()
-    const answer = event.target.answer.value
+  $('main').on('submit', 'form', event => {
+    event.preventDefault();
+    const answer = event.target.answer.value;
     const currentQuestion = STORE.questions[STORE.questionNumber];
     if(currentQuestion.correctAnswer == answer){
-      STORE.score++
+      STORE.score++;
       STORE.page = 'correct';
     } else {
       STORE.page = 'incorrect';
     }
+    STORE.questionNumber ++;
     render();
+    console.log ('submit button working');
+    return false;
   });
 }
-function nextQuestion() {
+function next() {
   //when button is clicked, the next question page will render 
+  $('main').on('click', '#next', event => {
+    if (STORE.questionNumber < 5){
+      STORE.page = 'question';
+    } else {
+      STORE.page = 'final';
+    }
+    render();
+    console.log ('next button working');
+  });
 }
 function restartQuiz() {
   //when button is clicked, start view will render 
+  $('main').on('click', '#restart', event => {
+    STORE.page = 'start';
+    STORE.score = 0;
+    STORE.questionNumber = 0;
+    render();
+    console.log ('restart button working');
+  });
 }
 
 function main() {
   render();
   startQuiz();
   submitAnswer();
-  nextQuestion();
+  next();
   restartQuiz();
 }
 
