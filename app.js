@@ -5,7 +5,8 @@
  */
 const STORE = {
   // 5 or more questions are required
-  page: 'start',
+  //const currentQuestion = STORE.questions[STORE.questionNumber];
+  view: 'start',
   questionNumber: 0,
   score: 0,
   questions: [
@@ -25,7 +26,7 @@ const STORE = {
         'Sanctuary',
         'Claptraps place',
         'Southern shelf',
-        'This'
+        'Three horns divide'
       ],
       correctAnswer: 3
     },
@@ -34,7 +35,7 @@ const STORE = {
       answers: [
         'Sir mix a lot',
         'Siracha',
-        'This',
+        'Sir Hammerlock',
         'Sir nighteye death'
       ],
       correctAnswer: 2
@@ -42,7 +43,7 @@ const STORE = {
     {
       question: 'Where do you farm the easy infinity pistol?',
       answers: [
-        'This',
+        'Three horns drive',
         'Sanctuary',
         'Claptraps place',
         'Southern Shelf'
@@ -52,7 +53,7 @@ const STORE = {
     {
       question: 'What is the name of the first boss you get to kill in Borderlands 2?',
       answers: [
-        'This',
+        'Knuckledragger',
         'Badassarus',
         'Dukinomom',
         'Terramorphus the invincible'
@@ -76,14 +77,16 @@ const STORE = {
  */
 
 function generateStartView(){
-  return `<section class="page" id="start">
+  return `<section class="view" id="start">
+  <h1>Welcome to the Borderlands 2 Quiz</h1>
+  <p>Test your knowledge and prove you're a fan</p>
   <button id="start">Start</button>
 </section>`;
 }
 function generateQuestionView(){
-  return `<section class="page" id="question">
+  return `<section class="view" id="question">
   <form action="">
-    <h2></h2>
+    <h2><span id="questionNumber"></span>/5 <span id="questionString"></span> Score:<span id="score"></span></h2>
     <label for="radio0" id="label0"></label>
     <input type="radio" name="answer" id="radio0" value="0">
     <label for="radio1" id="label1"></label>
@@ -99,23 +102,35 @@ function generateQuestionView(){
 }
 
 function generateCorrectView() {
-  return `<div>
+  return `<section class="view" id="correct">
   <h1>Correct</h1>
   <img src="http://vignette2.wikia.nocookie.net/talesfromtheborderlands/images/7/7e/Thumbsupbot.png/revision/latest?cb=20141126165829" alt="Thumbs up image">
+  <p>Click the next button to continue</p>
   <button type="button" id="next">Next</button>
-</div>`;
+</section>`;
 }
 
 function generateIncorrectView(){
-  return `<section class="page" id="incorrect">
+  return `<section class="view" id="incorrect">
+  <h2>Sorry, that was wrong</h2>
+  <h3>The correct answer was: <span id="correctAnswer"></span></h3>
+  <p>Click the next button to continue</p>
   <button type="button" id="next">Next</button>
 </section>`;
 }
 
 function generateFinalView(){
-  return `<section class="page" id="final">
+  return `<section class="view" id="final">
+  <h2>Final Score</h2>
+  <h3 id="finalScore"></h3>
+  <p>Click the restart button to play again</p>
   <button id="restart">Restart</button>
 </section>`;
+}
+
+function generateCorrectAnswerLocation(){
+  const previousQuestionNumber = STORE.questionNumber -1;
+  return STORE.questions[previousQuestionNumber];
 }
 
 function render() {
@@ -123,40 +138,48 @@ function render() {
   console.log(`Current question index is ${STORE.questionNumber}`);
   console.log(`Current question score is ${STORE.score}`);
 
-  if (STORE.page ==='start'){
+  if (STORE.view ==='start'){
     const startView = generateStartView();
     $('main').html(startView);
-  } else if (STORE.page === 'question') {
+  } else if (STORE.view === 'question') {
     const questionView = generateQuestionView();
     $('main').html(questionView);
 
     const currentQuestion = STORE.questions[STORE.questionNumber];
-    $('#question h2').text(currentQuestion.question);
+    const questionNumber = STORE.questionNumber + 1;
+    $('#question #questionString').text(currentQuestion.question);
     $('#label0').text(currentQuestion.answers[0]);
     $('#label1').text(currentQuestion.answers[1]);
     $('#label2').text(currentQuestion.answers[2]);
     $('#label3').text(currentQuestion.answers[3]);
-  } else if (STORE.page === 'correct'){
+    $('#questionNumber').text(questionNumber);
+    $('#score').text(STORE.score);
+  } else if (STORE.view === 'correct'){
     const correctView = generateCorrectView();
     $('main').html(correctView);
-  } else if (STORE.page === 'incorrect'){
+  } else if (STORE.view === 'incorrect'){
     const incorrectView = generateIncorrectView();
     $('main').html(incorrectView);
-  } else if (STORE.page === 'final'){
+
+    const correctAnswerLocation = generateCorrectAnswerLocation();
+    const correctIndex = STORE.questions[STORE.questionNumber - 1].correctAnswer;
+    $('#correctAnswer').text(correctAnswerLocation.answers[correctIndex]);
+  } else if (STORE.view === 'final'){
     const finalView = generateFinalView();
     $('main').html(finalView);
+    $('#finalScore').text(STORE.score);
   }
 }
 function startQuiz() {
   //when button is clicked, the first question view will render 
   $('main').on('click', '#start', event => {
-    STORE.page = 'question';
+    STORE.view = 'question';
     render();
     console.log ('start button working');
   });
 }
 function submitAnswer() {
-  //when button is clicked, the results page will render with the correct answer 
+  //when button is clicked, the results view will render with the correct answer 
   //and current score will be updated
   $('main').on('submit', 'form', event => {
     event.preventDefault();
@@ -164,9 +187,9 @@ function submitAnswer() {
     const currentQuestion = STORE.questions[STORE.questionNumber];
     if(currentQuestion.correctAnswer == answer){
       STORE.score++;
-      STORE.page = 'correct';
+      STORE.view = 'correct';
     } else {
-      STORE.page = 'incorrect';
+      STORE.view = 'incorrect';
     }
     STORE.questionNumber ++;
     render();
@@ -175,21 +198,23 @@ function submitAnswer() {
   });
 }
 function next() {
-  //when button is clicked, the next question page will render 
+  //when button is clicked, the next question view will render or final view if there
+  //are more questions
   $('main').on('click', '#next', event => {
     if (STORE.questionNumber < 5){
-      STORE.page = 'question';
+      STORE.view = 'question';
     } else {
-      STORE.page = 'final';
+      STORE.view = 'final';
     }
     render();
     console.log ('next button working');
   });
 }
+
 function restartQuiz() {
   //when button is clicked, start view will render 
   $('main').on('click', '#restart', event => {
-    STORE.page = 'start';
+    STORE.view = 'start';
     STORE.score = 0;
     STORE.questionNumber = 0;
     render();
