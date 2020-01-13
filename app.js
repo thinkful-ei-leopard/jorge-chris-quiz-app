@@ -85,18 +85,18 @@ function generateStartView(){
 }
 function generateQuestionView(){
   return `<section class="view" id="question">
+  <h2><span id="questionNumber"></span>/5 <span id="questionString"></span> Score:<span id="score"></span></h2>
   <form action="">
-    <h2><span id="questionNumber"></span>/5 <span id="questionString"></span> Score:<span id="score"></span></h2>
+    <input type="radio" name="answer" class="radioButton" id="radio0" value="0">
     <label for="radio0" id="label0"></label>
-    <input type="radio" name="answer" id="radio0" value="0">
+    <input type="radio" name="answer" class="radioButton" id="radio1" value="1">
     <label for="radio1" id="label1"></label>
-    <input type="radio" name="answer" id="radio1" value="1">
+    <input type="radio" name="answer" class="radioButton" id="radio2" value="2">
     <label for="radio2" id="label2"></label>
-    <input type="radio" name="answer" id="radio2" value="2">
+    <input type="radio" name="answer" class="radioButton" id="radio3" value="3">
     <label for="radio3" id="label3"></label>
-    <input type="radio" name="answer" id="radio3" value="3">
 
-    <button>Enter</button>
+    <button>Submit</button>
   </form>
 </section>`;
 }
@@ -104,7 +104,7 @@ function generateQuestionView(){
 function generateCorrectView() {
   return `<section class="view" id="correct">
   <h1>Correct</h1>
-  <img src="http://vignette2.wikia.nocookie.net/talesfromtheborderlands/images/7/7e/Thumbsupbot.png/revision/latest?cb=20141126165829" alt="Thumbs up image">
+  <img src="http://vignette2.wikia.nocookie.net/talesfromtheborderlands/images/7/7e/Thumbsupbot.png/revision/latest?cb=20141126165829" alt="Game character giving a thumbs up">
   <p>Click the next button to continue</p>
   <button type="button" id="next">Next</button>
 </section>`;
@@ -113,6 +113,7 @@ function generateCorrectView() {
 function generateIncorrectView(){
   return `<section class="view" id="incorrect">
   <h2>Sorry, that was wrong</h2>
+  <img src="https://vignette.wikia.nocookie.net/villains/images/9/90/Handsome_Jack.png/revision/latest/top-crop/width/360/height/450?cb=20151031140214" alt="Game character with crossed arms">
   <h3>The correct answer was: <span id="correctAnswer"></span></h3>
   <p>Click the next button to continue</p>
   <button type="button" id="next">Next</button>
@@ -128,16 +129,7 @@ function generateFinalView(){
 </section>`;
 }
 
-function generateCorrectAnswerLocation(){
-  const previousQuestionNumber = STORE.questionNumber -1;
-  return STORE.questions[previousQuestionNumber];
-}
-
 function render() {
-  console.log('render is working');
-  console.log(`Current question index is ${STORE.questionNumber}`);
-  console.log(`Current question score is ${STORE.score}`);
-
   if (STORE.view ==='start'){
     const startView = generateStartView();
     $('main').html(startView);
@@ -147,13 +139,13 @@ function render() {
 
     const currentQuestion = STORE.questions[STORE.questionNumber];
     const questionNumber = STORE.questionNumber + 1;
-    $('#question #questionString').text(currentQuestion.question);
-    $('#label0').text(currentQuestion.answers[0]);
-    $('#label1').text(currentQuestion.answers[1]);
-    $('#label2').text(currentQuestion.answers[2]);
-    $('#label3').text(currentQuestion.answers[3]);
-    $('#questionNumber').text(questionNumber);
-    $('#score').text(STORE.score);
+    $('#question #questionString').html(currentQuestion.question);
+    $('#label0').html(currentQuestion.answers[0]);
+    $('#label1').html(currentQuestion.answers[1]);
+    $('#label2').html(currentQuestion.answers[2]);
+    $('#label3').html(currentQuestion.answers[3]);
+    $('#questionNumber').html(questionNumber);
+    $('#score').html(STORE.score);
   } else if (STORE.view === 'correct'){
     const correctView = generateCorrectView();
     $('main').html(correctView);
@@ -161,13 +153,13 @@ function render() {
     const incorrectView = generateIncorrectView();
     $('main').html(incorrectView);
 
-    const correctAnswerLocation = generateCorrectAnswerLocation();
+    const correctAnswerLocation = STORE.questions[STORE.questionNumber -1];
     const correctIndex = STORE.questions[STORE.questionNumber - 1].correctAnswer;
-    $('#correctAnswer').text(correctAnswerLocation.answers[correctIndex]);
+    $('#correctAnswer').html(correctAnswerLocation.answers[correctIndex]);
   } else if (STORE.view === 'final'){
     const finalView = generateFinalView();
     $('main').html(finalView);
-    $('#finalScore').text(STORE.score);
+    $('#finalScore').html(STORE.score);
   }
 }
 function startQuiz() {
@@ -175,7 +167,6 @@ function startQuiz() {
   $('main').on('click', '#start', event => {
     STORE.view = 'question';
     render();
-    console.log ('start button working');
   });
 }
 function submitAnswer() {
@@ -183,6 +174,7 @@ function submitAnswer() {
   //and current score will be updated
   $('main').on('submit', 'form', event => {
     event.preventDefault();
+
     const answer = event.target.answer.value;
     const currentQuestion = STORE.questions[STORE.questionNumber];
     if(currentQuestion.correctAnswer == answer){
@@ -193,8 +185,6 @@ function submitAnswer() {
     }
     STORE.questionNumber ++;
     render();
-    console.log ('submit button working');
-    return false;
   });
 }
 function next() {
@@ -207,7 +197,6 @@ function next() {
       STORE.view = 'final';
     }
     render();
-    console.log ('next button working');
   });
 }
 
@@ -218,7 +207,6 @@ function restartQuiz() {
     STORE.score = 0;
     STORE.questionNumber = 0;
     render();
-    console.log ('restart button working');
   });
 }
 
