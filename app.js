@@ -11,27 +11,27 @@ const STORE = {
   score: 0,
   questions: [
     {
-      question: 'What is the name of the robot that follows your character  around?',
+      question: 'What year did Borderlands 2 come out?',
       answers: [
-        'FlapJack',
-        'EDI',
-        'Claptrap',
-        'E2-DR'
+        '2013',
+        '2011',
+        '2014',
+        '2012'
       ],
       correctAnswer: 2
     },
     {
-      question: 'Where can you get a double penetrating unkempt harold weapon ?',
+      question: 'Which one is not a playable character?',
       answers: [
-        'Sanctuary',
-        'Claptraps place',
-        'Southern shelf',
-        'Three horns divide'
+        'Axton',
+        'Maya',
+        'Zer0',
+        'Jeff'
       ],
       correctAnswer: 3
     },
     {
-      question: 'What is the name of the man who helps put the robots eye back into place?',
+      question: 'What is the name of the man who helps put Claptraps eye back into place?',
       answers: [
         'Sir mix a lot',
         'Siracha',
@@ -41,17 +41,17 @@ const STORE = {
       correctAnswer: 2
     },
     {
-      question: 'Where do you farm the easy infinity pistol?',
+      question: 'Which element is most effective on sheilds?',
       answers: [
-        'Three horns drive',
-        'Sanctuary',
-        'Claptraps place',
-        'Southern Shelf'
+        'Shock',
+        'Incendiary',
+        'Explosive',
+        'Slag'
       ],
       correctAnswer: 0
     },
     {
-      question: 'What is the name of the first boss you get to kill in Borderlands 2?',
+      question: 'What is the name of the first boss?',
       answers: [
         'Knuckledragger',
         'Badassarus',
@@ -79,7 +79,7 @@ const STORE = {
 function generateStartView(){
   return `<section class="view" id="start">
   <h1>Welcome to the Borderlands 2 Quiz</h1>
-  <p>Test your knowledge and prove you're a fan</p>
+  <p>Test your knowledge</p>
   <button id="start">Start</button>
 </section>`;
 }
@@ -95,7 +95,6 @@ function generateQuestionView(){
     <label for="radio2" id="label2"></label>
     <input type="radio" name="answer" class="radioButton" id="radio3" value="3">
     <label for="radio3" id="label3"></label>
-
     <button>Submit</button>
   </form>
 </section>`;
@@ -103,7 +102,7 @@ function generateQuestionView(){
 
 function generateCorrectView() {
   return `<section class="view" id="correct">
-  <h1>Correct</h1>
+  <h2>Correct</h2>
   <img src="http://vignette2.wikia.nocookie.net/talesfromtheborderlands/images/7/7e/Thumbsupbot.png/revision/latest?cb=20141126165829" alt="Game character giving a thumbs up">
   <p>Click the next button to continue</p>
   <button type="button" id="next">Next</button>
