@@ -87,14 +87,23 @@ function generateQuestionView(){
   return `<section class="view" id="question">
   <h2><span id="questionNumber"></span>/5 <span id="questionString"></span> Score:<span id="score"></span></h2>
   <form action="">
-    <input type="radio" name="answer" class="radioButton" id="radio0" value="0">
-    <label for="radio0" id="label0"></label>
+    <div>
+      <input type="radio" name="answer" class="radioButton" id="radio0" value="0">
+      <label for="radio0" id="label0"></label>
+    </div>
+    <div>
     <input type="radio" name="answer" class="radioButton" id="radio1" value="1">
     <label for="radio1" id="label1"></label>
+    </div>
+    <div>
     <input type="radio" name="answer" class="radioButton" id="radio2" value="2">
     <label for="radio2" id="label2"></label>
+    </div>
+    <div>
     <input type="radio" name="answer" class="radioButton" id="radio3" value="3">
     <label for="radio3" id="label3"></label>
+    </div>
+
     <button>Submit</button>
   </form>
 </section>`;
